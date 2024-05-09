@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskCategoryDto } from './dto/create-task_category.dto';
 import { UpdateTaskCategoryDto } from './dto/update-task_category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TaskCategory } from './entities/task_category.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TaskCategoriesService {
+
+  constructor(
+    @InjectRepository(TaskCategory)
+    private TaskCategoryRepository: Repository<TaskCategory>,
+  ){}
   create(createTaskCategoryDto: CreateTaskCategoryDto) {
-    return 'This action adds a new taskCategory';
+    return this.TaskCategoryRepository.save(createTaskCategoryDto);
   }
 
   findAll() {
-    return `This action returns all taskCategories`;
+    return this.TaskCategoryRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} taskCategory`;
+    return this.TaskCategoryRepository.findOneBy({id});
   }
 
   update(id: number, updateTaskCategoryDto: UpdateTaskCategoryDto) {
-    return `This action updates a #${id} taskCategory`;
+    return this.TaskCategoryRepository.update(id,updateTaskCategoryDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} taskCategory`;
+    return this.TaskCategoryRepository.delete(id);
   }
 }
